@@ -1,9 +1,9 @@
-interface JwtHeader {
+export interface JwtHeader {
   alg: Algorithm;
   typ: AlgorithmFormat;
 }
 
-interface JwtClaim {
+export interface JwtClaim {
   iss: string;
   scope: string;
   aud: string;
@@ -11,13 +11,13 @@ interface JwtClaim {
   iat: number;
 }
 
-interface TokenResponse {
+export interface TokenResponse {
   access_token: string;
   scope: string;
   token_type: string;
   expires_in: number;
 }
 
-declare type Byte = number;
-type Algorithm = 'RS256';
-type AlgorithmFormat = 'JWT';
+export declare type Byte = number;
+export type Algorithm = 'RS256';
+export type AlgorithmFormat = 'JWT';

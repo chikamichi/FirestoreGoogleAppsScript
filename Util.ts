@@ -1,4 +1,5 @@
-class Util_ {
+import FirestoreAPI = gapi.client.firestore;
+export default class Util_ {
   /**
    * RegEx test for root path references. Groups relative path for extraction.
    */

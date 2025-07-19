@@ -1,7 +1,11 @@
+import FirestoreAPI = gapi.client.firestore;
+import { FirestoreGoogleAppsScript as T } from './typings';
+import Util_ from './Util';
+
 /**
  * Firestore Document
  */
-class Document implements FirestoreAPI.Document, FirestoreAPI.MapValue {
+export default class Document implements FirestoreAPI.Document, FirestoreAPI.MapValue {
   fields?: Record<string, FirestoreAPI.Value>;
   createTime?: string;
   updateTime?: string;
@@ -14,13 +18,13 @@ class Document implements FirestoreAPI.Document, FirestoreAPI.MapValue {
    * @param obj
    * @param name
    */
-  constructor(obj: Value | FirestoreAPI.Document, name?: string | Document | FirestoreAPI.ReadOnly) {
+  constructor(obj: T.Value | FirestoreAPI.Document, name?: string | Document | FirestoreAPI.ReadOnly) {
     //Treat parameters as existing Document with extra parameters to merge in
     if (typeof name === 'object') {
       Object.assign(this, obj);
       Object.assign(this, name);
     } else {
-      this.fields = Document.wrapMap(obj as ValueObject).fields;
+      this.fields = Document.wrapMap(obj as T.ValueObject).fields;
       if (name) {
         this.name = name;
       }
@@ -49,7 +53,7 @@ class Document implements FirestoreAPI.Document, FirestoreAPI.MapValue {
    * @param {object} firestoreDoc the Firestore document whose fields will be extracted
    * @return {object} an object with the given document's fields and values
    */
-  get obj(): Record<string, Value> {
+  get obj(): Record<string, T.Value> {
     return Document.unwrapObject(this);
   }
 
@@ -57,7 +61,7 @@ class Document implements FirestoreAPI.Document, FirestoreAPI.MapValue {
     return `Document (${Util_.getDocumentFromPath(this.name as string)[1]})`;
   }
 
-  static unwrapValue(obj: FirestoreAPI.Value): Value {
+  static unwrapValue(obj: FirestoreAPI.Value): T.Value {
     // eslint-disable-next-line prefer-const
     let [type, val]: [string, any] = Object.entries(obj)[0];
     switch (type) {
@@ -83,9 +87,9 @@ class Document implements FirestoreAPI.Document, FirestoreAPI.MapValue {
     }
   }
 
-  static unwrapObject(obj: FirestoreAPI.MapValue): ValueObject {
+  static unwrapObject(obj: FirestoreAPI.MapValue): T.ValueObject {
     return Object.entries(obj.fields || {}).reduce(
-      (o: Record<string, Value>, [key, val]: [string, FirestoreAPI.Value]) => {
+      (o: Record<string, T.Value>, [key, val]: [string, FirestoreAPI.Value]) => {
         o[key] = Document.unwrapValue(val);
         return o;
       },
@@ -93,7 +97,7 @@ class Document implements FirestoreAPI.Document, FirestoreAPI.MapValue {
     );
   }
 
-  static unwrapArray(wrappedArray: FirestoreAPI.Value[] = []): Value[] {
+  static unwrapArray(wrappedArray: FirestoreAPI.Value[] = []): T.Value[] {
     return wrappedArray.map(this.unwrapValue, this);
   }
 
@@ -102,13 +106,13 @@ class Document implements FirestoreAPI.Document, FirestoreAPI.MapValue {
     return new Date(wrappedDate.replace(Util_.regexDatePrecision, '$1'));
   }
 
-  static wrapValue(val: Value): FirestoreAPI.Value {
+  static wrapValue(val: T.Value): FirestoreAPI.Value {
     const type = typeof val;
     switch (type) {
       case 'string':
         return this.wrapString(val as string);
       case 'object':
-        return this.wrapObject(val as ValueObject);
+        return this.wrapObject(val as T.ValueObject);
       case 'number':
         return this.wrapNumber(val as number);
       case 'boolean':
@@ -132,7 +136,7 @@ class Document implements FirestoreAPI.Document, FirestoreAPI.MapValue {
     return { stringValue: string };
   }
 
-  static wrapObject(obj: ValueObject): FirestoreAPI.Value {
+  static wrapObject(obj: T.ValueObject): FirestoreAPI.Value {
     if (!obj) {
       return this.wrapNull();
     }
@@ -154,9 +158,9 @@ class Document implements FirestoreAPI.Document, FirestoreAPI.MapValue {
     return { mapValue: this.wrapMap(obj) };
   }
 
-  static wrapMap(obj: ValueObject): FirestoreAPI.MapValue {
+  static wrapMap(obj: T.ValueObject): FirestoreAPI.MapValue {
     return {
-      fields: Object.entries(obj).reduce((o: Record<string, FirestoreAPI.Value>, [key, val]: [string, Value]) => {
+      fields: Object.entries(obj).reduce((o: Record<string, FirestoreAPI.Value>, [key, val]: [string, T.Value]) => {
         o[key] = Document.wrapValue(val);
         return o;
       }, {}),

@@ -1,7 +1,13 @@
+import FirestoreAPI = gapi.client.firestore;
+import Document from './Document';
+import Request from './Request';
+import Query from './Query';
+import Util_ from './Util';
+
 /**
  * Extends Firestore class with private method
  */
-class FirestoreRead {
+export default class FirestoreRead {
   /**
    * Get the Firestore document or collection at a given path.
    * If the collection contains enough IDs to return a paginated result, this method only returns the first page.

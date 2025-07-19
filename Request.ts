@@ -1,8 +1,10 @@
+import Util_ from './Util';
+
 /**
  * Manages the requests to send. Chain methods to update options.
  * Must call .get/.post/.patch/.remove to send the request with given options.
  */
-class Request {
+export default class Request {
   url: string;
   authToken: string;
   queryString: string;

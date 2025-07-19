@@ -1,9 +1,20 @@
+import FirestoreAPI = gapi.client.firestore;
+import FirestoreRead from './FirestoreRead';
+import FirestoreWrite from './FirestoreWrite';
+import FirestoreDelete from './FirestoreDelete';
+import Document from './Document';
+import Query from './Query';
+import Auth from './Auth';
+import Request from './Request';
+
+export { Auth, Document, Firestore, FirestoreRead, FirestoreWrite, FirestoreDelete, Query, Request };
+
 /* eslint @typescript-eslint/no-unused-vars: ["error", { "varsIgnorePattern": "^getFirestore$" }] */
 
 /**
  * An authenticated interface to a Firestore project.
  */
-class Firestore implements FirestoreRead, FirestoreWrite, FirestoreDelete {
+export default class Firestore implements FirestoreRead, FirestoreWrite, FirestoreDelete {
   auth: Auth;
   basePath: string;
   baseUrl: string;
@@ -133,7 +144,7 @@ class Firestore implements FirestoreRead, FirestoreWrite, FirestoreDelete {
   query_ = FirestoreRead.prototype.query_;
 }
 
-type Version = 'v1' | 'v1beta1' | 'v1beta2';
+export type Version = 'v1' | 'v1beta1' | 'v1beta2';
 
 /**
  * Get an object that acts as an authenticated interface with a Firestore project.
@@ -144,6 +155,6 @@ type Version = 'v1' | 'v1beta1' | 'v1beta2';
  * @param {string} apiVersion [Optional] The Firestore API Version ("v1beta1", "v1beta2", or "v1")
  * @return {Firestore} an authenticated interface with a Firestore project (function)
  */
-function getFirestore(email: string, key: string, projectId: string, apiVersion: Version = 'v1'): Firestore {
+export function getFirestore(email: string, key: string, projectId: string, apiVersion: Version = 'v1'): Firestore {
   return new Firestore(email, key, projectId, apiVersion);
 }

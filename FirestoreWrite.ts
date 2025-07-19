@@ -1,7 +1,12 @@
+import FirestoreAPI = gapi.client.firestore;
+import Document from './Document';
+import Request from './Request';
+import Util_ from './Util';
+
 /**
  * Extends Firestore class with private method
  */
-class FirestoreWrite {
+export default class FirestoreWrite {
   /**
    * Create a document with the given ID and fields.
    *

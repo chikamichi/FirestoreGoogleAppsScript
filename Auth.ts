@@ -1,3 +1,7 @@
+import Request from './Request';
+import Util_ from './Util';
+import type * as AuthTypes from './typings/Auth';
+
 /**
  * Auth token is formatted to {@link https://developers.google.com/identity/protocols/oauth2/service-account#authorizingrequests}
  *
@@ -7,7 +11,7 @@
  * @param authUrl the authorization url
  * @returns {string} the access token needed for making future requests
  */
-class Auth {
+export default class Auth {
   email: string;
   key: string;
   authUrl: string;
@@ -31,7 +35,7 @@ class Auth {
    * @returns {string} The generated access token string
    */
   get accessToken(): string {
-    const request = new Request(this.authUrl, '', this.options_).post<TokenResponse>();
+    const request = new Request(this.authUrl, '', this.options_).post<AuthTypes.TokenResponse>();
     return request.access_token;
   }
 
@@ -47,7 +51,7 @@ class Auth {
     return `${signatureInput}.${Utilities.base64EncodeWebSafe(signature)}`;
   }
 
-  get jwtPayload_(): JwtClaim {
+  get jwtPayload_(): AuthTypes.JwtClaim {
     const seconds = ~~(new Date().getTime() / 1000);
     return {
       iss: this.email,
@@ -58,7 +62,7 @@ class Auth {
     };
   }
 
-  get jwtHeader_(): JwtHeader {
+  get jwtHeader_(): AuthTypes.JwtHeader {
     return {
       alg: 'RS256',
       typ: 'JWT',

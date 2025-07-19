@@ -1,10 +1,16 @@
-interface QueryCallback {
+import FirestoreAPI = gapi.client.firestore;
+import Document from './Document';
+import Util_ from './Util';
+
+import type { FilterOp } from './typings/Query';
+
+export interface QueryCallback {
   (query: Query): Document[];
 }
 /**
  * @see {@link https://firebase.google.com/docs/firestore/reference/rest/v1/StructuredQuery#Operator_1 FieldFilter Operator}
  */
-enum FieldFilterOps_ {
+export enum FieldFilterOps_ {
   '==' = 'EQUAL',
   '===' = 'EQUAL',
   '<' = 'LESS_THAN',
@@ -18,7 +24,7 @@ enum FieldFilterOps_ {
 /**
  * @see {@link https://firebase.google.com/docs/firestore/reference/rest/v1/StructuredQuery#Operator_2 UnaryFilter Operator}
  */
-enum UnaryFilterOps_ {
+export enum UnaryFilterOps_ {
   'nan' = 'IS_NAN',
   'null' = 'IS_NULL',
 }
@@ -29,7 +35,7 @@ enum UnaryFilterOps_ {
  *
  * @see {@link https://firebase.google.com/docs/firestore/reference/rest/v1/StructuredQuery Firestore Structured Query}
  */
-class Query implements FirestoreAPI.StructuredQuery {
+export default class Query implements FirestoreAPI.StructuredQuery {
   select?: FirestoreAPI.Projection;
   from?: FirestoreAPI.CollectionSelector[];
   where?: FirestoreAPI.Filter;
@@ -104,7 +110,7 @@ class Query implements FirestoreAPI.StructuredQuery {
 
   filter_(field: string, operator: string | number | null, value: any): FirestoreAPI.Filter {
     if (typeof operator === 'string') {
-      operator = operator.toLowerCase().replace('_', '') as FilterOp;
+      operator = (operator.toLowerCase().replace('_', '') as FilterOp) as string;
     } else if (value == null) {
       // Covers null and undefined values
       operator = 'null';

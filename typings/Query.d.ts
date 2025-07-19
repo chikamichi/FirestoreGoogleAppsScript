@@ -1,14 +1,16 @@
-type FilterOp = keyof (typeof FieldFilterOps_ & typeof UnaryFilterOps_);
+import { FieldFilterOps_, UnaryFilterOps_ } from '../Query';
+
+export type FilterOp = keyof (typeof FieldFilterOps_ & typeof UnaryFilterOps_);
 
 // A composite filter operator.
-type CompositeFilterOp =
+export type CompositeFilterOp =
   // Unspecified. This value must not be used.
   | 'OPERATOR_UNSPECIFIED'
   // The results are required to satisfy each of the combined filters.
   | 'AND';
 
 // A field filter operator.
-type FieldFilterOp =
+export type FieldFilterOp =
   // Unspecified. This value must not be used.
   | 'OPERATOR_UNSPECIFIED'
   // Less than. Requires that the field come first in `order_by`.
@@ -29,7 +31,7 @@ type FieldFilterOp =
   | 'ARRAY_CONTAINS_ANY';
 
 // A unary operator.
-type UnaryFilterOp =
+export type UnaryFilterOp =
   // Unspecified. This value must not be used.
   | 'OPERATOR_UNSPECIFIED'
   // Test if a field is equal to NaN.
@@ -38,7 +40,7 @@ type UnaryFilterOp =
   | 'IS_NULL';
 
 // A sort direction.
-type OrderDirection =
+export type OrderDirection =
   // Unspecified.
   | 'DIRECTION_UNSPECIFIED'
   // Ascending.

@@ -1,7 +1,10 @@
+import FirestoreAPI = gapi.client.firestore;
+import Request from './Request';
+
 /**
  * Extends Firestore class with private method
  */
-class FirestoreDelete {
+export default class FirestoreDelete {
   /**
    * Delete the Firestore document at the given path.
    * Note: this deletes ONLY this document, and not any subcollections.

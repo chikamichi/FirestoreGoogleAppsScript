@@ -1,3 +1,11 @@
+import { getFirestore } from './Firestore';
+import { FirestoreGoogleAppsScript } from './typings/index';
+import Util_ from './Util';
+
+import type { Version } from './Firestore';
+type Firestore = FirestoreGoogleAppsScript.Firestore;
+type Value = FirestoreGoogleAppsScript.Value;
+
 function StoreCredentials_(): void {
   /** DO NOT SAVE CREDENTIALS HERE */
   const email = 'xxx@appspot.gserviceaccount.com';
@@ -30,7 +38,7 @@ class Tests implements TestManager {
       this.pass.push('Test_Get_Firestore');
     } catch (e) {
       // On failure, fail the remaining tests without execution
-      this.fail.set('Test_Get_Firestore', e);
+      this.fail.set('Test_Get_Firestore', e as Error);
       const err = new Error('Test Initialization Error');
       err.stack = 'See Test_Get_Firestore Error';
       for (const func of funcs) {
@@ -73,7 +81,7 @@ class Tests implements TestManager {
           // eslint-disable-next-line no-ex-assign
           e = err;
         }
-        this.fail.set(func, e);
+        this.fail.set(func, e as Error);
       }
     }
   }
@@ -112,7 +120,7 @@ class Tests implements TestManager {
       this.db.createDocument(path);
       GSUnit.fail('Duplicate document without error');
     } catch (e) {
-      if (e.message !== `Document already exists: ${this.db.basePath}${path}`) {
+      if ((e as Error).message !== `Document already exists: ${this.db.basePath}${path}`) {
         throw e;
       }
     }
@@ -219,7 +227,7 @@ class Tests implements TestManager {
       this.db.getDocument(path);
       GSUnit.fail('Missing document without error');
     } catch (e) {
-      if (e.message !== `Document "${this.db.basePath}${path}" not found.`) {
+      if ((e as Error).message !== `Document "${this.db.basePath}${path}" not found.`) {
         throw e;
       }
     }
